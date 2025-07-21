@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: ./split_receipt_backend
+    container_name: laravel_app
+    volumes:
+      - ./split_receipt_backend:/var/www  # Лучше монтировать конкретную папку бекенда
+    expose:
+      - 9000                           # expose — внутренний порт, не пробрасывается наружу
+    depends_on:
+      - db
+    env_file:
+      - ./split_receipt_backend/.env
+    restart: unless-stopped
+
+  db:
+    image: postgres:15
+    container_name: laravel_db
+    restart: always
+    environment:
+      POSTGRES_DB: laravel
+      POSTGRES_USER: laravel
+      POSTGRES_PASSWORD: secret
+    ports:
+      - 5433:5432                       # PostgreSQL по умолчанию 5432 внутри контейнера
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  frontend:
+    build:
+      context: ./split_receipt_frontend
+    container_name: react_frontend
+    expose:
+      - 80                             # expose внутреннего порта nginx в frontend контейнере
+    depends_on:
+      - app
+    restart: unless-stopped
+
+  gateway:
+    build:
+      context: ./gateway               # если хочешь билдить из Dockerfile gateway
+      dockerfile: Dockerfile           # если Dockerfile называется не стандартно, иначе можно убрать
+    container_name: gateway_nginx
+    ports:
+      - 80:80
+    volumes:
+      - ./gateway/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - app
+      - frontend
+    restart: unless-stopped
+
+volumes:
+  pgdata:

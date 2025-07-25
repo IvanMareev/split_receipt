@@ -39,7 +39,7 @@ jobs:
 
       - name: 🧬 SSH into server and deploy
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@$ 150.241.114.232 << 'EOF'
             cd ${{ secrets.DEPLOY_PATH }}
             docker compose pull
             docker compose up -d

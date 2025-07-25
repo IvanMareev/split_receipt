@@ -5,8 +5,8 @@ on:
     branches: [main]
 
 env:
-  BACKEND_IMAGE: yourusername/split_receipt_backend
-  FRONTEND_IMAGE: yourusername/split_receipt_frontend
+  BACKEND_IMAGE: ivanmareev/split_receipt_backend
+  FRONTEND_IMAGE: ivanmareev/split_receipt_frontend
 
 jobs:
   build-and-deploy:

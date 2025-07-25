@@ -30,5 +30,9 @@ return [
     'max_age' => 0,
 
     'supports_credentials' => false,
+    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+    'allowed_origins' => ['https://web.telegram.org', 'https://t.me'],
+    'allowed_headers' => ['*'],
+    'allowed_methods' => ['*'],
 
 ];

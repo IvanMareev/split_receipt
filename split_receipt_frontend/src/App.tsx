@@ -21,11 +21,11 @@ function App() {
   };
 
   return (
-    <>
+    <div>
       <h1>Telegram WebApp</h1>
       <button onClick={handleSubmit}>Send</button>
       <p>{response}</p>
-    </>
+    </div>
   );
 }
 

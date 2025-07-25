@@ -31,7 +31,7 @@ WORKDIR /var/www
 COPY . .
 
 # Устанавливаем зависимости Laravel
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
 # Настроим права
 RUN chown -R www-data:www-data /var/www \

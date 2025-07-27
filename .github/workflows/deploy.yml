@@ -7,6 +7,7 @@ on:
 env:
   BACKEND_IMAGE: ivanmareev/split_receipt_backend
   FRONTEND_IMAGE: ivanmareev/split_receipt_frontend
+  GATEWAY_IMAGE: ivanmareev/split_receipt_gateway
 
 jobs:
   build-and-deploy:
@@ -36,7 +37,7 @@ jobs:
         run: |
           docker build -t $GATEWAY_IMAGE:latest ./gateway
           docker push $GATEWAY_IMAGE:latest
-          
+
       - name: 🔐 Setup SSH
         uses: webfactory/ssh-agent@v0.8.0
         with:

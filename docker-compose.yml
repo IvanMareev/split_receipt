@@ -1,3 +1,7 @@
+networks:
+  app-network:
+    driver: bridge
+
 services:
   app:
     image: ivanmareev/split_receipt_backend:latest
@@ -8,12 +12,16 @@ services:
       - ./split_receipt_backend/.env
     depends_on:
       - db
+    networks:
+      - app-network  
     restart: unless-stopped
 
   db:
     image: postgres:15
     container_name: laravel_db
     restart: always
+    networks:
+      - app-network
     environment:
       POSTGRES_DB: laravel
       POSTGRES_USER: laravel
@@ -26,6 +34,8 @@ services:
   frontend:
     image: ivanmareev/split_receipt_frontend:latest
     container_name: react_frontend
+    networks:
+      - app-network
     expose:
       - 80
     depends_on:
@@ -40,7 +50,10 @@ services:
     depends_on:
       - app
       - frontend
+    networks:
+      - app-network  
     restart: unless-stopped
 
 volumes:
   pgdata:
+

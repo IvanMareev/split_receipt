@@ -25,7 +25,7 @@ services:
       - pgdata:/var/lib/postgresql/data
 
   frontend:
-    image: root/split_receipt_frontend:latest
+    image: ivanmareev/split_receipt_frontend:latest
     container_name: react_frontend
     expose:
       - 80

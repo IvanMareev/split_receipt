@@ -1,6 +1,3 @@
-version: '3.8'
-
-
 services:
   app:
     image: ivanmareev/split_receipt_backend:latest

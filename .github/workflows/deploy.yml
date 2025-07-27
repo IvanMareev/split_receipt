@@ -1,6 +1,5 @@
 name: 🚀 Deploy via Docker Hub
 
-
 on:
   push:
     branches: [main]

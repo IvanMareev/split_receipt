@@ -32,6 +32,11 @@ jobs:
           docker build -t $FRONTEND_IMAGE:latest ./split_receipt_frontend
           docker push $FRONTEND_IMAGE:latest
 
+      - name: 🐳 Build & Push Gateway
+        run: |
+          docker build -t $GATEWAY_IMAGE:latest ./gateway
+          docker push $GATEWAY_IMAGE:latest
+          
       - name: 🔐 Setup SSH
         uses: webfactory/ssh-agent@v0.8.0
         with:

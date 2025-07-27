@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
 
+
 env:
   BACKEND_IMAGE: ivanmareev/split_receipt_backend
   FRONTEND_IMAGE: ivanmareev/split_receipt_frontend

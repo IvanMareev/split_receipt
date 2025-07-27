@@ -41,9 +41,9 @@ jobs:
       - name: 🧬 SSH into server and deploy
         run: |
           ssh -o StrictHostKeyChecking=no root@150.241.114.232 << 'EOF'
-            cd ${{ secrets.DEPLOY_PATH }}
+            cd /home/ubuntu/app
             docker compose pull
             docker compose up -d
           EOF
 
-          
+

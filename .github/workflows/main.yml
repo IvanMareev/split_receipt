@@ -123,27 +123,21 @@ jobs:
           tags: ivanmareev/taski_gateway:latest
 
   deploy:
-    name: Deploy to server
-    runs-on: ubuntu-latest
-    needs: build_and_push_gateway
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.8.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+  - name: Deploy latest images and restart containers
+    run: |
+      ssh -o StrictHostKeyChecking=no root@150.241.114.232 << 'EOF'
+        set -euo pipefail
+        cd /home/ubuntu/app
 
-      - name: Deploy latest images and restart containers
-        run: |
-          ssh -o StrictHostKeyChecking=no root@150.241.114.232 << 'EOF'
-            set -euo pipefail
-            cd /home/ubuntu/app
+        echo "Pulling latest images"
+        docker compose pull
 
-            echo "Pulling latest images"
-            docker compose pull
+        echo "Restarting containers"
+        docker compose up -d --remove-orphans
 
-            echo "Restarting containers"
-            docker compose up -d --remove-orphans
+        echo "Containers status:"
+        docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}"
 
-            echo "Deploy completed"
-          EOF
+        echo "Recent logs from containers:"
+        docker compose logs --tail=50
+      EOF

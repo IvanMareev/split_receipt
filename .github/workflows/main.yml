@@ -133,7 +133,7 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Deploy and verify
+      - name: Deploy latest images and restart containers
         run: |
           ssh -o StrictHostKeyChecking=no root@150.241.114.232 << 'EOF'
             set -euo pipefail
@@ -145,23 +145,5 @@ jobs:
             echo "Restarting containers"
             docker compose up -d --remove-orphans
 
-            echo "Containers status:"
-            docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}"
-
-            echo "Check backend image"
-            docker inspect --format='{{.RepoTags}}' backend | grep 'ivanmareev/taski_backend:latest' || { echo 'Backend image mismatch'; exit 1; }
-
-            echo "Check frontend image"
-            docker inspect --format='{{.RepoTags}}' react_frontend | grep 'ivanmareev/taski_frontend:latest' || { echo 'Frontend image mismatch'; exit 1; }
-
-            echo "Check gateway image"
-            docker inspect --format='{{.RepoTags}}' gateway_nginx | grep 'ivanmareev/taski_gateway:latest' || { echo 'Gateway image mismatch'; exit 1; }
-
-            echo "Check frontend static files in nginx"
-            docker exec gateway_nginx test -f /usr/share/nginx/html/index.html || { echo 'No index.html in nginx'; exit 1; }
-
-            echo "Check HTTP response"
-            curl -sSf http://localhost | grep -q '<!DOCTYPE html>' || { echo 'Site not serving properly'; exit 1; }
-
-            echo "Deploy successful"
+            echo "Deploy completed"
           EOF

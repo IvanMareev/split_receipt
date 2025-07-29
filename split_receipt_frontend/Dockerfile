@@ -7,5 +7,3 @@ RUN npm ci
 
 COPY . ./
 RUN npm run build
-
-# Никакого второго этапа с Nginx — volume сам передаст файлы

@@ -47,7 +47,7 @@ jobs:
       - name: Build and push backend image
         uses: docker/build-push-action@v5
         with:
-          context: ./laravel_app/
+          context: ./backend/
           push: true
           tags: ivanmareev/taski_backend:latest
 
@@ -149,7 +149,7 @@ jobs:
             docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}"
 
             echo "Check backend image"
-            docker inspect --format='{{.RepoTags}}' laravel_app | grep 'ivanmareev/taski_backend:latest' || { echo 'Backend image mismatch'; exit 1; }
+            docker inspect --format='{{.RepoTags}}' backend | grep 'ivanmareev/taski_backend:latest' || { echo 'Backend image mismatch'; exit 1; }
 
             echo "Check frontend image"
             docker inspect --format='{{.RepoTags}}' react_frontend | grep 'ivanmareev/taski_frontend:latest' || { echo 'Frontend image mismatch'; exit 1; }

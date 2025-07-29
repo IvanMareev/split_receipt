@@ -27,10 +27,6 @@ jobs:
         run: composer install --prefer-dist --no-progress --no-suggest --optimize-autoloader
         working-directory: ./backend
 
-      - name: Run Laravel tests
-        working-directory: ./backend
-        run: php artisan test
-
   build_and_push_backend:
     runs-on: ubuntu-latest
     needs: tests

@@ -27,10 +27,10 @@ services:
 
   react_frontend:
     build:
-      context: ./frontend  # путь к React-проекту
+      context: ./frontend
     container_name: react_frontend
     volumes:
-      - frontend_static:/app/dist
+      - frontend_static:/app/dist  # этот путь совпадает с outDir в vite.config.js
     networks:
       - app-network
 
@@ -41,16 +41,14 @@ services:
     ports:
       - "80:80"
     depends_on:
-      - app
       - react_frontend
     volumes:
       - ./gateway/default.conf.template:/etc/nginx/templates/default.conf.template
-      - frontend_static:/static:ro
+      - frontend_static:/static:ro  # nginx будет читать статику отсюда
     networks:
       - app-network
 
 volumes:
-  pgdata:
   frontend_static:
 
 networks:

@@ -1,13 +1,11 @@
-# ./frontend/Dockerfile
+# frontend/Dockerfile
 FROM node:20 as builder
 WORKDIR /app
 
 COPY package*.json ./
 RUN npm ci
 
-COPY . .
+COPY . ./
 RUN npm run build
 
-# production stage
-FROM nginx:alpine
-COPY --from=builder /app/dist /usr/share/nginx/html
+# Никакого второго этапа с Nginx — volume сам передаст файлы

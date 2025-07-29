@@ -1,6 +1,8 @@
+
 volumes:
-  pg_data:
+  pgdata:
   static:
+  media:
 
 services:
   app:
@@ -34,6 +36,8 @@ services:
     command: cp -r /app/dist/. /static/
     volumes:
       - static:/static
+    networks:
+      - app-network
 
   gateway:
     build: ./nginx/
@@ -43,3 +47,8 @@ services:
     volumes:
       - static:/static
       - media:/media
+    networks:
+      - app-network
+
+networks:
+  app-network:

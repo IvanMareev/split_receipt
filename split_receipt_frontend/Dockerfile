@@ -1,13 +1,11 @@
-FROM node:18
+# Stage 1: сборка фронтенда
+FROM node:20 as builder
 WORKDIR /app
-
-COPY package.json package.json
-COPY package-lock.json package-lock.json
-
-RUN npm ci
-
+COPY package*.json ./
+RUN npm install
 COPY . .
 RUN npm run build
-RUN npm install --global http-server
 
-CMD ["npx", "-y", "http-server", "-p", "8000", "/app/dist"]
+# Stage 2: создаём контейнер только со статикой
+FROM nginx:alpine
+COPY --from=builder /app/dist /usr/share/nginx/html

@@ -30,12 +30,8 @@ services:
       - app-network
 
   react_frontend:
-    env_file: .env
     build: ./react_frontend/
     container_name: frontend
-    command: cp -r /app/dist/. /static/
-    volumes:
-      - static:/static
     networks:
       - app-network
 
@@ -44,9 +40,6 @@ services:
     env_file: .env
     ports:
       - 9000:80
-    volumes:
-      - static:/static
-      - media:/media
     networks:
       - app-network
 

@@ -1,27 +1,36 @@
 volumes:
-  pgdata:
+  pg_data:
   static:
-  media:
+
 
 services:
-  react_frontend:
-    build: ./react_frontend/
-    container_name: frontend
-    networks:
-      - app-network
+  db:
+    image: postgres:13
+    container_name: db
     volumes:
-      - static:/usr/share/nginx/html  # Монтируем volume static внутрь react_frontend в папку, куда собирается статика
-    command: sh -c "npm install && npm run build && cp -r dist/* /usr/share/nginx/html"  # Собираем и копируем в volume
-
+      - pg_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}  
+  backend:
+    build: ./backend/
+    container_name: backend
+    env_file: .env
+    volumes:
+      - static:/static
+  frontend:
+    env_file: .env
+    build: ./frontend/
+    container_name: frontend
+    command: cp -r /app/build/. /static/
+    volumes:
+      - static:/static
   gateway:
     build: ./nginx/
     env_file: .env
     ports:
       - 9000:80
-    networks:
-      - app-network
     volumes:
-      - static:/usr/share/nginx/html  # Монтируем тот же volume static в nginx, чтобы отдавать статику
-
-networks:
-  app-network:
+      - static:/static
+      - media:/media

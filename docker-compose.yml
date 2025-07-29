@@ -1,12 +1,10 @@
-version: '3.8'
-
 services:
   app:
     build: ./laravel_app/
-    container_name: split_receipt_backend
+    container_name: laravel_app
     env_file: .env
-    volumes:
-      - static:/static
+    ports:
+      - "9000:9000"
 
   db:
     image: postgres:15
@@ -17,31 +15,33 @@ services:
       POSTGRES_USER: laravel
       POSTGRES_PASSWORD: secret
     ports:
-      - 5433:5432
+      - "5433:5432"
     volumes:
-      - pg_data:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
 
-  frontend:
+  react_frontend:
     image: ivanmareev/split_receipt_frontend:latest
     container_name: react_frontend
+    expose:
+      - "8000"   # expose порт 8000 внутри сети docker
     networks:
       - app-network
-    expose:
-      - 80
-    depends_on:
-      - app
-    restart: unless-stopped
 
   gateway:
     build: ./gateway/
+    container_name: gateway_nginx
     env_file: .env
     ports:
-      - 9000:80
-    volumes:
-      - static:/static
-      - media:/media
+      - "80:80"
+    depends_on:
+      - app
+      - react_frontend
+    networks:
+      - app-network
 
 volumes:
-  pg_data:
-  static:
-  media:
+  pgdata:
+
+networks:
+  app-network:
+    driver: bridge

@@ -23,9 +23,11 @@ services:
     image: ivanmareev/split_receipt_frontend:latest
     container_name: react_frontend
     expose:
-      - "8000"   # expose порт 8000 внутри сети docker
+      - "8000"
     networks:
       - app-network
+    volumes:
+      - frontend_build:/app/build
 
   gateway:
     build: ./gateway/
@@ -41,6 +43,7 @@ services:
 
 volumes:
   pgdata:
+  frontend_build:
 
 networks:
   app-network:

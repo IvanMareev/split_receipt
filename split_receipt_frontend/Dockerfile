@@ -1,13 +1,12 @@
 FROM node:20
 WORKDIR /app
 
-COPY package.json package.json
-COPY package-lock.json package-lock.json
-
+COPY package*.json ./
 RUN npm ci
-
 COPY . .
 RUN npm run build
-RUN npm install --global http-server
+
+# Копируем build в volume, который видит nginx
+RUN mkdir -p /static && cp -r /app/build/* /static/
 
 CMD ["npx", "-y", "http-server", "-p", "8000", "-a", "0.0.0.0", "-c-1", "/app/build"]

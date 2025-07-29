@@ -22,12 +22,13 @@ services:
   react_frontend:
     image: ivanmareev/split_receipt_frontend:latest
     container_name: react_frontend
+    command: cp -r /app/build/. /static/
     expose:
       - "8000"
     networks:
       - app-network
     volumes:
-      - frontend_build:/app/build
+      - static:/static
 
   gateway:
     build: ./gateway/
@@ -42,7 +43,7 @@ services:
       - app-network
     volumes:
       - ./gateway/default.conf.template:/etc/nginx/templates/default.conf.template
-      - frontend_build:/static:ro
+      - static:/static
 
 volumes:
   pgdata:

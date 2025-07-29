@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   app:
     build: ./laravel_app/
@@ -5,6 +7,8 @@ services:
     env_file: .env
     ports:
       - "9000:9000"
+    networks:
+      - app-network
 
   db:
     image: postgres:15
@@ -18,17 +22,17 @@ services:
       - "5433:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
-
-  react_frontend:
-    image: ivanmareev/split_receipt_frontend:latest
-    container_name: react_frontend
-    command: cp -r /app/build/. /static/
-    expose:
-      - "8000"
     networks:
       - app-network
+
+  react_frontend:
+    build:
+      context: ./frontend  # путь к React-проекту
+    container_name: react_frontend
     volumes:
-      - static:/static
+      - frontend_static:/app/dist
+    networks:
+      - app-network
 
   gateway:
     build: ./gateway/
@@ -39,15 +43,15 @@ services:
     depends_on:
       - app
       - react_frontend
-    networks:
-      - app-network
     volumes:
       - ./gateway/default.conf.template:/etc/nginx/templates/default.conf.template
-      - static:/static
+      - frontend_static:/static:ro
+    networks:
+      - app-network
 
 volumes:
   pgdata:
-  frontend_build:
+  frontend_static:
 
 networks:
   app-network:

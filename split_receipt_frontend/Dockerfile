@@ -1,9 +1,13 @@
-FROM node:20
+# ./frontend/Dockerfile
+FROM node:20 as builder
 WORKDIR /app
 
 COPY package*.json ./
 RUN npm ci
+
 COPY . .
 RUN npm run build
 
-CMD ["npx", "-y", "http-server", "-p", "8000", "-a", "0.0.0.0", "-c-1", "/app/dist"]
+# production stage
+FROM nginx:alpine
+COPY --from=builder /app/dist /usr/share/nginx/html

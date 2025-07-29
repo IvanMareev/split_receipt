@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-version: ["8.1", "8.2"]
+        php-version: ["8.2"]
 
     steps:
       - name: Checkout code
@@ -66,12 +66,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd split_receipt_frontend/
+          cd frontend/
           npm ci
 
       - name: Run frontend tests
         run: |
-          cd split_receipt_frontend/
+          cd frontend/
           npm run test
 
   build_and_push_frontend:
@@ -95,7 +95,7 @@ jobs:
       - name: Build and push frontend image
         uses: docker/build-push-action@v5
         with:
-          context: ./split_receipt_frontend/
+          context: ./frontend/
           push: true
           tags: ivanmareev/taski_frontend:latest
 

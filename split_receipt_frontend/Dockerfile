@@ -1,9 +1,8 @@
-# frontend/Dockerfile
-FROM node:20 as builder
+FROM node:18
+
 WORKDIR /app
+COPY . .
 
-COPY package*.json ./
-RUN npm ci
-
-COPY . ./
-RUN npm run build
+RUN npm install && npm run build
+# ключевая строка — создаём volume-совместимую директорию
+CMD ["sh", "-c", "cp -r dist/* /app/dist && tail -f /dev/null"]

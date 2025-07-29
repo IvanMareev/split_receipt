@@ -28,6 +28,7 @@ jobs:
         working-directory: ./backend
 
       - name: Run Laravel tests
+        working-directory: ./backend
         run: php artisan test
 
   build_and_push_backend:

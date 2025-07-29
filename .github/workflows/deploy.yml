@@ -35,7 +35,7 @@ jobs:
 
       - name: 🐳 Build & Push Gateway
         run: |
-          docker build -t $GATEWAY_IMAGE:latest ./gateway
+          docker build -t $GATEWAY_IMAGE:latest ./nginx
           docker push $GATEWAY_IMAGE:latest
 
       - name: 🔐 Setup SSH

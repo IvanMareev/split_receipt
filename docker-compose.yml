@@ -1,27 +1,17 @@
-networks:
-  app-network:
-    driver: bridge
+version: '3.8'
 
 services:
   app:
-    image: ivanmareev/split_receipt_backend:latest
-    container_name: laravel_app
-    expose:
-      - 9000
-    env_file:
-      - ./split_receipt_backend/.env
-    depends_on:
-      - db
-    networks:
-      - app-network  
-    restart: unless-stopped
+    build: ./laravel_app/
+    container_name: split_receipt_backend
+    env_file: .env
+    volumes:
+      - static:/static
 
   db:
     image: postgres:15
     container_name: laravel_db
     restart: always
-    networks:
-      - app-network
     environment:
       POSTGRES_DB: laravel
       POSTGRES_USER: laravel
@@ -29,7 +19,7 @@ services:
     ports:
       - 5433:5432
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pg_data:/var/lib/postgresql/data
 
   frontend:
     image: ivanmareev/split_receipt_frontend:latest
@@ -43,17 +33,15 @@ services:
     restart: unless-stopped
 
   gateway:
-    image: ivanmareev/split_receipt_gateway:latest 
-    container_name: gateway_nginx
+    build: ./gateway/
+    env_file: .env
     ports:
-      - 80:80
-    depends_on:
-      - app
-      - frontend
-    networks:
-      - app-network  
-    restart: unless-stopped
+      - 9000:80
+    volumes:
+      - static:/static
+      - media:/media
 
 volumes:
-  pgdata:
-
+  pg_data:
+  static:
+  media:

@@ -40,6 +40,9 @@ services:
       - react_frontend
     networks:
       - app-network
+    volumes:
+      - ./gateway/default.conf.template:/etc/nginx/templates/default.conf.template
+      - frontend_build:/static:ro
 
 volumes:
   pgdata:

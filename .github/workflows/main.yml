@@ -128,6 +128,11 @@ jobs:
     if: github.ref == 'refs/heads/main'
     needs: [build_and_push_backend, build_and_push_frontend, build_and_push_gateway]
     steps:
+      - name: 🔐 Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
       - name: Deploy latest images and restart containers
         run: |
           ssh -o StrictHostKeyChecking=no root@150.241.114.232 << 'EOF'

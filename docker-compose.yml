@@ -1,4 +1,6 @@
-version: '3.8'
+volumes:
+  pg_data:
+  static:
 
 services:
   app:
@@ -26,31 +28,18 @@ services:
       - app-network
 
   react_frontend:
-    build:
-      context: ./frontend
-    container_name: react_frontend
+    env_file: .env
+    build: ./react_frontend/
+    container_name: frontend
+    command: cp -r /app/dist/. /static/
     volumes:
-      - frontend_static:/app/dist  # этот путь совпадает с outDir в vite.config.js
-    networks:
-      - app-network
+      - static:/static
 
   gateway:
-    build: ./gateway/
-    container_name: gateway_nginx
+    build: ./nginx/
     env_file: .env
     ports:
-      - "80:80"
-    depends_on:
-      - react_frontend
+      - 9000:80
     volumes:
-      - ./gateway/default.conf.template:/etc/nginx/templates/default.conf.template
-      - frontend_static:/static:ro  # nginx будет читать статику отсюда
-    networks:
-      - app-network
-
-volumes:
-  frontend_static:
-
-networks:
-  app-network:
-    driver: bridge
+      - static:/static
+      - media:/media

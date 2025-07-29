@@ -1,8 +1,13 @@
 FROM node:18
-
 WORKDIR /app
-COPY . .
 
-RUN npm install && npm run build
-# ключевая строка — создаём volume-совместимую директорию
-CMD ["sh", "-c", "cp -r dist/* /app/dist && tail -f /dev/null"]
+COPY package.json package.json
+COPY package-lock.json package-lock.json
+
+RUN npm ci
+
+COPY . .
+RUN npm run build
+RUN npm install --global http-server
+
+CMD ["npx", "-y", "http-server", "-p", "8000", "/app/dist"]

@@ -1,6 +1,7 @@
 volumes:
   pg_data:
   static:
+  media:
 
 
 services:
@@ -23,7 +24,7 @@ services:
     env_file: .env
     build: ./frontend/
     container_name: frontend
-    command: cp -r /app/build/. /static/
+    command: sh -c "cp -r /app/dist/. /static" 
     volumes:
       - static:/static
   gateway:

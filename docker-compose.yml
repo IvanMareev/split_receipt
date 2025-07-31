@@ -21,8 +21,12 @@ services:
     volumes:
       - static:/static
   frontend:
-    build: ./frontend/
+    image: ivanmareev/split_receipt_frontend:latest
     container_name: frontend
+    env_file: .env
+    command: sh -c "cp -r /app/build/. /static"
+    volumes:
+      - static:/static
     ports:
       - "3000:3000"
   gateway:

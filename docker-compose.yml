@@ -24,7 +24,7 @@ services:
     env_file: .env
     build: ./frontend/
     container_name: frontend
-    command: sh -c "cp -r /app/dist/. /static" 
+    command: sh -c "cp -r /app/build/. /static" 
     volumes:
       - static:/static
   gateway:

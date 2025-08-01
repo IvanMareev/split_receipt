@@ -1,11 +1,9 @@
-FROM node:18 as builder
+# Stage 1: Сборка Vite-приложения
+FROM node:18 as build-stage
 WORKDIR /app
-COPY package*.json ./
-RUN npm ci
 COPY . .
-RUN npm run build
+RUN npm install && npm run build
 
+# Stage 2: Nginx для отдачи статики
 FROM nginx:alpine
-COPY --from=builder /app/build /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+COPY --from=build-stage /app/build /usr/share/nginx/html

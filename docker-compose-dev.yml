@@ -1,0 +1,51 @@
+volumes:
+  pg_data:
+  static:
+  media:
+
+services:
+  db:
+    image: postgres:13
+    container_name: db
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    container_name: backend
+    env_file: .env
+    volumes:
+      - ./backend:/var/www
+      - static:/static
+    ports:
+      - "9000:9000"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: frontend
+    env_file: .env
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "4173:4173"
+    command: npm run dev
+
+  gateway:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile.dev
+    env_file: .env
+    ports:
+      - "80:80"
+    volumes:
+      - static:/usr/share/nginx/html
+      - media:/media

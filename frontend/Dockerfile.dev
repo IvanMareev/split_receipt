@@ -1,14 +1,20 @@
+# Используем официальный Node.js образ
 FROM node:20
 
+# Рабочая директория в контейнере
 WORKDIR /app
 
+# Копируем package.json и package-lock.json
 COPY package*.json ./
 
+# Устанавливаем зависимости
 RUN npm install
 
-# Копируем исходники (при dev-монтаже в compose перезапишется)
+# Копируем остальной исходный код
 COPY . .
 
-EXPOSE 4173
+# Next.js dev-сервер работает на порту 3000
+EXPOSE 3000
 
-CMD ["npm", "run", "dev"]
+# Запускаем в режиме разработки
+CMD ["npm", "run", "dev"]   

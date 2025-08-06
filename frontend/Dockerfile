@@ -1,9 +1,23 @@
-# Stage 1: Сборка Vite-приложения
-FROM node:18 as build-stage
-WORKDIR /app
-COPY . .
-RUN npm install && npm run build
+# --- Stage 1: Build stage ---
+FROM node:20 AS builder
 
-# Stage 2: Nginx для отдачи статики
-FROM nginx:alpine
-COPY --from=build-stage /app/build /usr/share/nginx/html
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+RUN npm run build
+
+
+# --- Stage 2: Run stage ---
+FROM node:20
+
+WORKDIR /app
+
+COPY --from=builder /app ./
+
+# Next.js сервак
+EXPOSE 3000
+
+CMD ["npm", "start"]

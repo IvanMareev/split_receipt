@@ -24,7 +24,7 @@ services:
     build: ./frontend
     container_name: frontend
     ports:
-      - "4173:80"
+      - "3000:80"
     # volumes:
     #   - static:/usr/share/nginx/html 
   gateway:

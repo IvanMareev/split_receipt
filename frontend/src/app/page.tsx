@@ -1,35 +1,70 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import WebApp from "@telegram-apps/sdk";
+
+interface TelegramUser {
+  id: number;
+  first_name: string;
+  last_name?: string;
+  username?: string;
+  language_code?: string;
+  is_premium?: boolean;
+  photo_url?: string;
+}
 
 export default function Home() {
-  const [userInfo, setUserInfo] = useState("Telegram WebApp не инициализирован");
+  const [user, setUser] = useState<TelegramUser | null>(null);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    WebApp.ready(); // сообщает Telegram, что приложение готово
+    const tg = window.Telegram?.WebApp;
 
-    const user = WebApp.initDataUnsafe?.user;
-    if (user) {
-      setUserInfo(`Привет, ${user.first_name} (@${user.username || "без username"})`);
-    } else {
-      setUserInfo("Не удалось получить пользователя из initData");
+    if (!tg) {
+      setError("Telegram WebApp SDK не найден");
+      return;
     }
 
-    // Пример: изменение главной кнопки
-    WebApp.MainButton.setText("Готово");
-    WebApp.MainButton.show();
-    WebApp.MainButton.onClick(() => {
-      alert("Кнопка нажата!");
-      WebApp.close();
+    tg.ready();
+
+    const userData = tg.initDataUnsafe?.user;
+    if (userData) {
+      setUser(userData);
+    } else {
+      setError("Пользователь не найден");
+    }
+
+    tg.MainButton.setText("ОК");
+    tg.MainButton.show();
+    tg.MainButton.onClick(() => {
+      tg.close();
     });
   }, []);
 
+  if (error) return <p>{error}</p>;
+
+  if (!user) return <p>Загрузка...</p>;
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <pre>{userInfo}</pre>
-      </main>
+    <div style={{
+      maxWidth: 300,
+      margin: "40px auto",
+      padding: 20,
+      border: "1px solid #ccc",
+      borderRadius: 10,
+      fontFamily: "Arial",
+      textAlign: "center",
+    }}>
+      {user.photo_url && (
+        <img
+          src={user.photo_url}
+          alt="Avatar"
+          style={{ borderRadius: "50%", width: 100, height: 100, objectFit: "cover", marginBottom: 10 }}
+        />
+      )}
+      <h2>{user.first_name} {user.last_name}</h2>
+      {user.username && <p>@{user.username}</p>}
+      {user.language_code && <p>Язык: {user.language_code}</p>}
+      {!user.is_premium && <p>💎 NOT Premium пользователь</p>}
     </div>
   );
 }

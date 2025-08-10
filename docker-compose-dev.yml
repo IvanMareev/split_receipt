@@ -16,7 +16,7 @@ services:
 
   backend:
     build:
-      context: ./backend 
+      context: ./backend
       dockerfile: Dockerfile.dev
     container_name: backend
     env_file: .env
@@ -25,6 +25,7 @@ services:
       - static:/static
     ports:
       - "9000:9000"
+    command: php artisan serve --host=0.0.0.0 --port=9000
 
   frontend:
     build:

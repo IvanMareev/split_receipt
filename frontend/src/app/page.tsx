@@ -61,6 +61,7 @@ export default function Home() {
           style={{ borderRadius: "50%", width: 100, height: 100, objectFit: "cover", marginBottom: 10 }}
         />
       )}
+      {JSON.stringify(user)}
       <h2>{user.first_name} {user.last_name}</h2>
       {user.username && <p>@{user.username}</p>}
       {user.language_code && <p>Язык: {user.language_code}</p>}

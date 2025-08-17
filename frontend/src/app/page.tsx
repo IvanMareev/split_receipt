@@ -26,7 +26,7 @@ export default function Home() {
 
     tg.ready();
 
-    const userData = tg.initDataUnsafe?.user;
+    const userData = tg.initDataUnsafe;
     if (userData) {
       setUser(userData);
     } else {
@@ -54,18 +54,22 @@ export default function Home() {
       fontFamily: "Arial",
       textAlign: "center",
     }}>
-      {user.photo_url && (
+      {user?.user.photo_url && (
         <img
-          src={user.photo_url}
+          src={user?.user.photo_url}
           alt="Avatar"
           style={{ borderRadius: "50%", width: 100, height: 100, objectFit: "cover", marginBottom: 10 }}
         />
       )}
-      {JSON.stringify(user)}
-      <h2>{user.first_name} {user.last_name}</h2>
-      {user.username && <p>@{user.username}</p>}
-      {user.language_code && <p>Язык: {user.language_code}</p>}
-      {!user.is_premium && <p>💎 NOT Premium пользователь</p>}
+      <pre>
+        {JSON.stringify(user, null, 2)}
+      </pre>
+
+
+      <h2>{user?.user.first_name} {user?.user.last_name}</h2>
+      {user?.user.username && <p>@{user?.user.username}</p>}
+      {user?.user.language_code && <p>Язык: {user?.user.language_code}</p>}
+      {!user?.user.is_premium && <p>💎 NOT Premium пользователь</p>}
     </div>
   );
 }

@@ -13,7 +13,6 @@ class Bill extends Model
     protected $fillable = [
         'creator_id',
         'total_sum',
-        'status',
         'payment_date',
         'description',
     ];
@@ -34,13 +33,13 @@ class Bill extends Model
     // Аксессор для форматирования суммы
     public function getTotalSumAttribute($value)
     {
-        return number_format($value, 2, '.', ' ');
+        return number_format((float) $value, 2, '.', '');
     }
 
     // Мутатор для сохранения суммы
     public function setTotalSumAttribute($value)
     {
-        $this->attributes['total_sum'] = str_replace(' ', '', $value);
+        $this->attributes['total_sum'] = (float) $value;
     }
 
     public function items()

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Bill;
 use App\Models\BillItem;
+use Illuminate\Http\Client\Response;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class BillItemsController extends Controller
@@ -28,7 +30,18 @@ class BillItemsController extends Controller
         ], Response::HTTP_OK);
     }
 
-    
+
+    public function getBillItems(Request $billId): JsonResponse
+    {
+        $bill = Bill::with('items')->findOrFail($billId);
+
+        return response()->json([
+            'data' => $bill->items,
+            'message' => "OK"
+        ], Response::HTTP_OK);
+    }
+
+
 
     /**
      * Создать новый счет
@@ -44,7 +57,7 @@ class BillItemsController extends Controller
         $bill = Bill::create($validatedData);
 
 
-        $bill = Bill::create($validatedData);
+        // $bill = Bill::create($validatedData);
 
         return response()->json([
             'data' => $bill,

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BillController;
+use App\Http\Controllers\BillItemsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -20,6 +21,9 @@ Route::get('/bills/{bill}', [BillController::class, 'show']);
 Route::post('/bills', [BillController::class, 'store']);
 Route::put('/bills/{bill}', [BillController::class, 'update']);
 Route::delete('/bills/{bill}', [BillController::class, 'destroy']);
+
+
+Route::get('/bills/{bill}/items', [BillItemsController::class, 'getBillItems']);
 
 
 // Laravel автоматически редиректит на "login", если не авторизован

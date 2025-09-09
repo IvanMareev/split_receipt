@@ -42,9 +42,9 @@ class Bill extends Model
         $this->attributes['total_sum'] = (float) $value;
     }
 
-    public function items()
+    public function billItems()
     {
-        return $this->hasMany(BillItem::class);
+        return $this->hasMany(BillItem::class, 'bill_id');
     }
 
     protected $appends = ['formatted_total_sum'];
@@ -53,6 +53,7 @@ class Bill extends Model
     {
         return '₽ ' . number_format($this->total_sum, 2, ',', ' ');
     }
+    
 
     public function getStatusLabel()
     {

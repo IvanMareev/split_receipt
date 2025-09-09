@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
 
         // Создадим счета и у каждого несколько items
         Bill::factory(20)
-            ->has(BillItem::factory()->count(5)) // по 5 позиций в каждом счете
+            ->has(BillItem::factory()->count(5), 'billItems') // по 5 позиций в каждом счете
             ->create();
 
         // Если нужно просто много items без привязки:

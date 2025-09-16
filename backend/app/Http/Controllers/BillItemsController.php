@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Bill;
 use App\Models\BillItem;
-use Illuminate\Http\Client\Response;
+use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class BillItemsController extends Controller
 {
@@ -31,15 +32,30 @@ class BillItemsController extends Controller
     }
 
 
-    public function getBillItems(Request $billId): JsonResponse
+    public function getBillItems(Request $request, Bill $bill): JsonResponse
     {
-        $bill = Bill::with('items')->findOrFail($billId);
+        $bill->load('billItems');
 
         return response()->json([
-            'data' => $bill->items,
+            'data' => $bill,
             'message' => "OK"
         ], Response::HTTP_OK);
     }
+
+    public function getBillItemsByUserId(): JsonResponse
+    {
+        $userId = auth()->id();
+
+        $user = User::select('id', 'name')
+            ->with(['billCottected:id,creator_id,total_sum']) // обязательно user_id для связи!
+            ->findOrFail($userId);
+
+        return response()->json([
+            'data' => $user,
+            'message' => "OK"
+        ], Response::HTTP_OK);
+    }
+
 
 
 

@@ -25,7 +25,7 @@ class BillItem extends Model
      */
     public function bill()
     {
-        return $this->belongsTo(Bill::class, 'bill_id');
+        return $this->belongsTo(Bill::class);
     }
 
     /**

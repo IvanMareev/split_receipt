@@ -3,6 +3,7 @@ volumes:
   static:
   media:
 
+
 services:
   db:
     image: postgres:13
@@ -25,7 +26,6 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@example.com
       PGADMIN_DEFAULT_PASSWORD: admin
-      
 
   backend:
     build:
@@ -40,6 +40,11 @@ services:
       - "9000:9000"
     command: php artisan serve --host=0.0.0.0 --port=9000
 
+  memcached:
+    image: memcached:alpine
+    ports:
+      - "11211:11211"
+
   frontend:
     build:
       context: ./frontend
@@ -51,4 +56,3 @@ services:
       - /app/node_modules
     ports:
       - "3000:3000"
-  

@@ -44,4 +44,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+
+    public function billCottected()
+    {
+        return $this->hasMany(Bill::class, 'creator_id');
+    }
 }

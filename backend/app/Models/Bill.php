@@ -44,7 +44,7 @@ class Bill extends Model
 
     public function billItems()
     {
-        return $this->hasMany(BillItem::class, 'bill_id');
+        return $this->hasMany(BillItem::class);
     }
 
     protected $appends = ['formatted_total_sum'];

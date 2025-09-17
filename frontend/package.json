@@ -9,8 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ant-design/nextjs-registry": "^1.1.0",
+    "@ant-design/pro-components": "^2.8.10",
+    "@ant-design/pro-layout": "^7.22.7",
     "@telegram-apps/sdk": "^3.11.4",
-    "next": "15.4.5",
+    "antd": "^5.27.3",
+    "next": "^15.5.3",
     "react": "19.1.0",
     "react-dom": "19.1.0"
   },

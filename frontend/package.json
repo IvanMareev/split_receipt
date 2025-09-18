@@ -13,7 +13,8 @@
     "@ant-design/pro-components": "^2.8.10",
     "@ant-design/pro-layout": "^7.22.7",
     "@telegram-apps/sdk": "^3.11.4",
-    "antd": "^5.27.3",
+    "antd": "^5.27.4",
+    "axios": "^1.12.2",
     "next": "^15.5.3",
     "react": "19.1.0",
     "react-dom": "19.1.0"

@@ -15,18 +15,11 @@ import {
   Button,
 } from "antd";
 import { ProList } from '@ant-design/pro-components';
+import TelegramUser from "../../types/telegramUser";
+import useGetCredentials from "../../api/useGetCredantilas";
 const { Header, Content, Footer, Sider } = Layout;
 const { Title, Text } = Typography;
 
-interface TelegramUser {
-  id: number;
-  first_name: string;
-  last_name?: string;
-  username?: string;
-  language_code?: string;
-  is_premium?: boolean;
-  photo_url?: string;
-}
 
 
 const dataSource = [
@@ -56,6 +49,7 @@ export default function Home() {
   const [user, setUser] = useState<TelegramUser | null>(null);
   const [error, setError] = useState<string>("");
   const [expandedRowKeys, setExpandedRowKeys] = useState<readonly Key[]>([]);
+  const [token, setToken] = useState<string>('0');
 
   useEffect(() => {
     const tg = (window as any).Telegram?.WebApp;
@@ -75,6 +69,10 @@ export default function Home() {
     tg.MainButton.setText("ОК");
     tg.MainButton.show();
     tg.MainButton.onClick(() => tg.close());
+
+    let token1 = useGetCredentials(userData);
+
+    setToken(token1)
   }, []);
 
   if (error) {
@@ -100,7 +98,7 @@ export default function Home() {
       <Layout>
         <Header style={{ background: "#fff", padding: "0 24px" }}>
           <Title level={4} style={{ margin: 0 }}>
-            Дели и плати
+           gfgf {token} gfgf
           </Title>
         </Header>
 
@@ -140,68 +138,7 @@ export default function Home() {
             </Col>
           </Row>
         </Content>
-        <Content style={{ margin: 24 }}>
-          <Row justify="start">
-            <ProList<{ title: string }>
-              rowKey="title"
-              headerTitle="支持展开的列表"
-              toolBarRender={() => {
-                return [
-                  <Button key="3" type="primary">
-                    新建
-                  </Button>,
-                ];
-              }}
-              expandable={{ expandedRowKeys, onExpandedRowsChange: setExpandedRowKeys }}
-              dataSource={dataSource}
-              metas={{
-                title: {},
-                subTitle: {
-                  render: () => {
-                    return (
-                      <Space size={0}>
-                        <Tag color="blue">Ant Design</Tag>
-                        <Tag color="#5BD8A6">TechUI</Tag>
-                      </Space>
-                    );
-                  },
-                },
-                description: {
-                  render: () => {
-                    return 'Ant Design, a design language for background applications, is refined by Ant UED Team';
-                  },
-                },
-                avatar: {},
-                content: {
-                  render: () => (
-                    <div
-                      style={{
-                        minWidth: 200,
-                        flex: 1,
-                        display: 'flex',
-                        justifyContent: 'flex-end',
-                      }}
-                    >
-                      <div
-                        style={{
-                          width: '200px',
-                        }}
-                      >
-                        <div>发布中</div>
-                        <Progress percent={80} />
-                      </div>
-                    </div>
-                  ),
-                },
-                actions: {
-                  render: () => {
-                    return <a key="invite">邀请</a>;
-                  },
-                },
-              }}
-            />
-          </Row>
-        </Content>
+        
 
         <Footer style={{ textAlign: "center" }}>
           © {new Date().getFullYear()} Мареев Иван

@@ -34,7 +34,7 @@ services:
     container_name: backend
     env_file: .env
     volumes:
-      - ./backend:/var/www
+      # - ./backend:/var/www
       - static:/static
     ports:
       - "9000:9000"
